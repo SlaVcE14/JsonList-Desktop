@@ -1,0 +1,241 @@
+/* Global Styles */
+.root {
+    -fx-background-color: white;
+    -fx-font-family: "System";
+    -fx-font-size: 14px;
+}
+
+/* Button Styles */
+.button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.1);
+}
+
+.button:pressed {
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+}
+
+.icon-button {
+    -fx--color: transparent;
+    -fx-background-radius: 10;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-max-width: 40px;
+    -fx-max-height: 40px;
+    -fx-padding: 8;
+}
+
+
+.icon-button:hover {
+    -fx-background-color: #B3C5FF;
+}
+
+.icon-button:pressed {
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Title Panel Styles */
+.title-text {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+
+}
+
+/* Menu Styles */
+.menu-container {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 5);
+    -fx-padding: 10;
+    -fx-spacing: 10;
+}
+
+/* List Styles */
+.list-container {
+    -fx-background-color: transparent;
+}
+
+.list-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 10;
+}
+
+.list-cell:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.05);
+}
+
+.list-cell:selected {
+    -fx-background-color: rgba(0, 0, 0, 0.1);
+}
+
+.empty-list-text {
+    -fx-font-size: 17px;
+    -fx-text-fill: #757575;
+}
+
+/* Search URL View Styles */
+.url-search {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #CCCCCC;
+    -fx-border-radius: 10;
+    -fx-padding: 10 15 10 15;
+}
+
+.url-search:focused {
+    -fx-border-color: #2196F3; /* Material Design blue color */
+}
+
+/* Raw JSON View Styles */
+.raw-json-container {
+    -fx-background-color: transparent;
+}
+
+.web-view {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+/* Loading View Styles */
+.progress-bar {
+    -fx-accent: white;
+}
+
+.progress-bar > .track {
+    -fx-background-color: transparent;
+}
+
+.progress-bar > .bar {
+    -fx-background-radius: 2;
+    -fx-background-insets: 0;
+}
+
+/* Split View Styles */
+.split-view-bg {
+    -fx-background-color: #F5F5F5;
+    -fx-background-radius: 10;
+    -fx-border-color: #E0E0E0;
+    -fx-border-radius: 10;
+}
+
+/* Main Application Button Styles */
+#openFileBtn {
+    -fx-background-color: #4A5C92; /* Material Design blue */
+    -fx-text-fill: white;
+    -fx-background-radius: 60;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+
+}
+
+#openFileBtn:hover {
+    -fx-background-color: #B3C5FF; /* Darker blue */
+    -fx-text-fill: black;
+}
+
+#openFileBtn:pressed {
+    -fx-background-color: #ffffff; /* Darker blue */
+    -fx-text-fill: black;
+}
+
+#openUrlBtn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #1A1B21;
+    -fx-border-color: transparent;
+    -fx-padding: 10 20 10 20;
+    -fx-cursor: hand;
+    -fx-background-radius: 60;
+}
+
+#openUrlBtn:hover {
+    -fx-background-color: #B3C5FF;
+}
+
+/* Filter Button Styles */
+#filterBtn {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-min-width: 80px;
+    -fx-min-height: 40px;
+}
+
+/* Path List Background Styles */
+.path-list-bg {
+    -fx-background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Full Raw Button Styles */
+#fullRawBtn {
+    -fx-arc-width: 10;
+    -fx-arc-height: 10;
+    -fx-fill: #BBBBBB;
+    -fx-cursor: hand;
+}
+
+#fullRawBtn:hover {
+    -fx-fill: #999999;
+}
+
+/* Drop Target Styles */
+.drop-target {
+    -fx-background-color: transparent;
+    -fx-border-color: #2196F3;
+    -fx-border-width: 2;
+    -fx-border-style: dashed;
+    -fx-border-radius: 10;
+}
+
+/* Animation styles - these will be applied programmatically */
+.fade-in {
+    -fx-opacity: 1;
+    -fx-transition: opacity 0.3s ease-in-out;
+}
+
+.fade-out {
+    -fx-opacity: 0;
+    -fx-transition: opacity 0.3s ease-in-out;
+}
+
+.slide-in {
+    -fx-translate-y: 0;
+    -fx-transition: translate-y 0.3s ease-out;
+}
+
+.slide-out {
+    -fx-translate-y: -100;
+    -fx-transition: translate-y 0.3s ease-in;
+}
+
+.debug {
+    -fx-background-color: #ff0000;
+}
+
+.split-pane:horizontal > .split-pane-divider {
+    -fx-background-color: transparent;
+    -fx-padding: 3;
+
+}
+.split-pane:horizontal > .split-pane-divider:hover {
+    -fx-background-color: #23232323;
+    -fx-padding: 3;
+}
+
+.split-pane:vertical > .split-pane-divider {
+   -fx-background-color: #23232323;
+}
+
+
+WebView {
+    -fx-border-radius: 20;
+    -fx-background-color: #DCE1F9;
+}
