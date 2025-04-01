@@ -5,10 +5,11 @@ import com.sj14apps.jsonlist.controllers.DesktopRawJsonView;
 import com.sj14apps.jsonlist.core.controllers.FileManager;
 import com.sj14apps.jsonlist.core.controllers.RawJsonView;
 import javafx.application.Application;
-import javafx.fxml.FXML;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
@@ -17,15 +18,25 @@ import java.io.*;
 
 public class MainApplication extends Application {
 
-    @FXML
+    Scene scene;
+
+    private double zoomFactor = 1.0;
+    private static final double ZOOM_DELTA = 0.1;
+   boolean isMenuOpen, isRawJsonLoaded, isTopMenuVisible, isUrlSearching, isVertical = true;
     public WebView rawJsonWV;
     RawJsonView rawJsonView;
     FileManager fileManager;
 
     @Override
     public void start(Stage stage) throws IOException {
+        initialize(stage);
+        setEvents();
+
+    }
+
+    private void initialize(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), stage.getWidth(), stage.getHeight());
+        scene = new Scene(fxmlLoader.load(), stage.getWidth(), stage.getHeight());
         scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
         stage.setTitle("Json List");
         stage.setScene(scene);
@@ -40,14 +51,20 @@ public class MainApplication extends Application {
                 0xBA1A1A,
                 0xDDE1F9);
 
+        rawJsonView.updateRawJson("");
 
         fileManager = new DesktopFileManager(stage,this);
 
-        Button openFileBtn = (Button) scene.lookup("#openFileBtn");
-        openFileBtn.setOnAction(e -> fileManager.importFromFile());
-        rawJsonView.updateRawJson("");
 
+    }
 
+    private void setEvents() {
+
+        rawJsonWV.setOnScroll(event -> handleZoom(event, rawJsonWV));
+
+        ((Button) scene.lookup("#openFileBtn")).setOnAction(e -> fileManager.importFromFile());
+
+    }
     }
 
     public void loadFileIntoWebView(File file) {
