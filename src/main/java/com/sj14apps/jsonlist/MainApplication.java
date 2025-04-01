@@ -56,6 +56,16 @@ public class MainApplication extends Application {
         fileManager = new DesktopFileManager(stage,this);
 
 
+    private void handleZoom(ScrollEvent event, WebView webView) {
+        if (event.isControlDown()) {
+            if (event.getDeltaY() > 0) {
+                zoomFactor += ZOOM_DELTA;
+            } else {
+                zoomFactor = Math.max(0.5, zoomFactor - ZOOM_DELTA);
+            }
+            webView.setZoom(zoomFactor);
+            event.consume();
+        }
     }
 
     private void setEvents() {
