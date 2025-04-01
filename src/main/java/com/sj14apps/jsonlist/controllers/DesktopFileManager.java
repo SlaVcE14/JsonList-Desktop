@@ -6,9 +6,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.util.prefs.Preferences;
 
 public class DesktopFileManager implements FileManager {
-
+    private static final String LAST_OPENED_DIR = "lastOpenedDirectory";
     Stage stage;
     MainApplication main;
 
@@ -20,12 +21,25 @@ public class DesktopFileManager implements FileManager {
 
     @Override
     public void importFromFile() {
+        Preferences prefs = Preferences.userNodeForPackage(DesktopFileManager.class);
+
         FileChooser fileChooser = new FileChooser();
+        String lastDir = prefs.get(LAST_OPENED_DIR, null);
+
+        if (lastDir != null) {
+            File lastDirectory = new File(lastDir);
+            if (lastDirectory.exists()) {
+                fileChooser.setInitialDirectory(lastDirectory);
+            }
+        }
+
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("JSON Files", "*.json"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All files", "*"));
 
         File selectedFile = fileChooser.showOpenDialog(stage);
 
         if (selectedFile != null) {
+            prefs.put(LAST_OPENED_DIR, selectedFile.getParent());
             System.out.println("Selected file: " + selectedFile.getAbsolutePath());
             main.loadFileIntoWebView(selectedFile);
         } else {
