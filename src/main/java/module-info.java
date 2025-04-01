@@ -4,6 +4,7 @@ module com.sj14apps.jsonlist {
     requires javafx.web;
     requires com.google.gson;
     requires java.desktop;
+    requires java.prefs;
 
 
     opens com.sj14apps.jsonlist to javafx.fxml;
