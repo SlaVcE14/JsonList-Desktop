@@ -9,12 +9,14 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.*;
+import java.util.Objects;
 
 public class MainApplication extends Application {
 
@@ -38,6 +40,7 @@ public class MainApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
         scene = new Scene(fxmlLoader.load(), stage.getWidth(), stage.getHeight());
         scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
+        stage.getIcons().add(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("images/icon.png"))));
         stage.setTitle("Json List");
         stage.setScene(scene);
         stage.show();
