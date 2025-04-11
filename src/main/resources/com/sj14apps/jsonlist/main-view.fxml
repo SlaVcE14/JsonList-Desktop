@@ -12,7 +12,7 @@
     <BorderPane fx:id="mainView">
         <top>
             <HBox fx:id="topPanel" alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 15;">
-                <Button fx:id="backBtn" onAction="#onBack" styleClass="icon-button" visible="true">
+                <Button fx:id="backBtn" styleClass="icon-button" visible="true">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0">
                             <Image url="@images/ic_back.png" />
@@ -46,9 +46,9 @@
         <center>
 
             <SplitPane fx:id="mainLL" dividerPositions="0.5">
-                <StackPane fx:id="listRL" VBox.vgrow="ALWAYS">
+                <StackPane fx:id="listRL" minWidth="300.0" VBox.vgrow="ALWAYS">
 
-                    <VBox alignment="CENTER" spacing="5">
+                    <VBox fx:id="openBtns" alignment="CENTER" spacing="5">
                         <ImageView fx:id="fileImg" fitHeight="100.0" fitWidth="100.0" preserveRatio="true" rotate="-15.0">
                             <Image url="@images/ic_file.png" />
                         </ImageView>
@@ -57,10 +57,14 @@
                     </VBox>
 
 
+                    <ListView fx:id="list" visible="false">
+                    </ListView>
+
 
                 </StackPane>
 
-                <StackPane fx:id="rawJsonRL" VBox.vgrow="ALWAYS">
+
+                <StackPane fx:id="rawJsonRL" minWidth="300.0" VBox.vgrow="ALWAYS">
                     <padding>
                         <Insets bottom="10.0" right="10.0" top="10.0" />
                     </padding>
