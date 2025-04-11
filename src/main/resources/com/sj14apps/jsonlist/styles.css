@@ -239,3 +239,6 @@ WebView {
     -fx-border-radius: 20;
     -fx-background-color: #DCE1F9;
 }
+.listItem {
+    -fx-background-color: #E2E2EC;
+}
