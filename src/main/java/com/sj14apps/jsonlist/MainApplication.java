@@ -66,6 +66,13 @@ public class MainApplication extends Application {
         stage.setTitle("Json List");
         stage.setScene(scene);
         stage.show();
+        stage.widthProperty().addListener((o, oldValue, newValue)->{
+            if(newValue.intValue() < 700.0) {
+                mainController.mainLL.setOrientation(Orientation.VERTICAL);
+            }else mainController.mainLL.setOrientation(Orientation.HORIZONTAL);
+        });
+
+
         stage.setMaximized(true);
         rawJsonWV = (WebView) scene.lookup("#rawJsonWV");
         list = (ListView<ListItem>) scene.lookup("#list");
