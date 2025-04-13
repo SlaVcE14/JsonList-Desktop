@@ -253,7 +253,14 @@ public class MainApplication extends Application {
 
     public void goBack(){
         if (data.isEmptyPath()){
-            System.exit(0);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Exit?");
+            alert.setHeaderText("Do you want to exit Json List?");
+            alert.getDialogPane().getButtonTypes().setAll(ButtonType.YES,ButtonType.NO);
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.YES){
+                System.exit(0);
+            }
             return;
         }
         data.goBack();
