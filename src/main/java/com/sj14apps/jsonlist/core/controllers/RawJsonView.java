@@ -11,6 +11,7 @@ public abstract class RawJsonView{
     int booleanAndNullColor;
     int bgColor;
     public boolean showJson;
+    public boolean isRawJsonLoaded;
 
     public RawJsonView(int textColor, int keyColor, int numberColor, int booleanAndNullColor, int bgColor) {
         this.textColor = textColor;
