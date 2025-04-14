@@ -19,19 +19,37 @@ public class DesktopRawJsonView extends RawJsonView {
 
     @Override
     public void toggleSplitView() {
-
+        main.controller.toggleSplitView();
+        showJson = !showJson;
+        if (showJson && !isRawJsonLoaded)
+            ShowJSON();
     }
 
     @Override
     public void ShowJSON() {
+
+        if (main.data.getRawData().equals("-1")){
+            if (showJson)
+                toggleSplitView();
+
+            return;
+        }
+
+        if (main.data.getRawData().equals(""))
+            return;
+
+        //todo thread ???
+        String dataStr = JsonFunctions.getAsPrettyPrint(main.data.getRawData());
+        updateRawJson(dataStr);
+        isRawJsonLoaded = true;
     }
 
     @Override
     public void updateRawJson(String string) {
 
         //TODO change this
-        String rawJson = generateHtml(JsonFunctions.getAsPrettyPrint(string),null);
-        WebEngine webEngine = main.rawJsonWV.getEngine();
+        String rawJson = generateHtml(string,null);
+        WebEngine webEngine = main.controller.rawJsonWV.getEngine();
         webEngine.loadContent(rawJson);
     }
 }
