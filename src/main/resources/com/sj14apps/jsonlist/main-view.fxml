@@ -22,7 +22,7 @@
 
                 <Label fx:id="titleTxt" maxWidth="Infinity" styleClass="title-text" text="Test/path/123" HBox.hgrow="ALWAYS" />
 
-                <Button fx:id="splitViewBtn" onAction="#toggleSplitView" styleClass="icon-button">
+                <Button fx:id="splitViewBtn" styleClass="icon-button">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0">
                             <Image url="@images/ic_splitscreen.png" />
@@ -73,7 +73,7 @@
                             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                         </padding>
                         <center>
-                            <WebView fx:id="rawJsonWV" visible="true" />
+                            <WebView fx:id="rawJsonWV" onScroll="#handleZoom" />
                         </center>
                     </BorderPane>
                     <Rectangle fx:id="fullRawBtn" arcHeight="10.0" arcWidth="10.0" fill="LIGHTGRAY" height="100.0" visible="false" width="7.0" StackPane.alignment="CENTER_LEFT" />

@@ -9,58 +9,66 @@ import com.sj14apps.jsonlist.core.ListItem;
 import com.sj14apps.jsonlist.core.controllers.FileManager;
 import com.sj14apps.jsonlist.core.controllers.JsonLoader;
 import com.sj14apps.jsonlist.core.controllers.RawJsonView;
+import com.sj14apps.jsonlist.core.controllers.WebManager;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 
+import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
+
 import javafx.scene.image.Image;
-import javafx.scene.input.ScrollEvent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 
 import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Optional;
 
 import static com.sj14apps.jsonlist.core.JsonFunctions.getListFromPath;
 
 public class MainApplication extends Application {
 
     Scene scene;
+    public MainView controller;
 
-    private double zoomFactor = 1.0;
-    private static final double ZOOM_DELTA = 0.1;
-    Label titleTxt;
-    ListView<ListItem> list;
     public JsonData data = new JsonData();
-   boolean isMenuOpen, isRawJsonLoaded, isTopMenuVisible, isUrlSearching, isVertical = true;
-    public WebView rawJsonWV;
+
+boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
+// todo   PathListAdapter pathAdapter;
+// todo   View menu, dim_bg, pathListView;
+// todo   AutoTransition autoTransition = new AutoTransition();
+// todo   Handler handler = new Handler();
+    Thread readFileThread;
     AppState state;
     RawJsonView rawJsonView;
     FileManager fileManager;
+    WebManager webController; //todo
     JsonLoader jsonLoader;
-    VBox openBtns;
-    MainView mainController;
+// todo   ArrayList<String> filterList = new ArrayList<>();
+
 
     @Override
     public void start(Stage stage) throws IOException {
         initialize(stage);
+        LoadStateData();
         setEvents();
 
     }
 
     private void initialize(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
+
         scene = new Scene(fxmlLoader.load(), stage.getWidth(), stage.getHeight());
-        mainController = fxmlLoader.getController();
+        controller = fxmlLoader.getController();
         scene.getStylesheets().add(getClass().getResource("styles.css").toExternalForm());
         stage.getIcons().add(new Image(Objects.requireNonNull(MainApplication.class.getResourceAsStream("images/icon.png"))));
         stage.setTitle("Json List");
@@ -68,16 +76,17 @@ public class MainApplication extends Application {
         stage.show();
         stage.widthProperty().addListener((o, oldValue, newValue)->{
             if(newValue.intValue() < 700.0) {
-                mainController.mainLL.setOrientation(Orientation.VERTICAL);
-            }else mainController.mainLL.setOrientation(Orientation.HORIZONTAL);
+                controller.mainLL.setOrientation(Orientation.VERTICAL);
+                controller.rawJsonRL.setPadding(new Insets(0,10,10,10));
+            }else {
+                controller.mainLL.setOrientation(Orientation.HORIZONTAL);
+                controller.rawJsonRL.setPadding(new Insets(10,10,10,0));
+            }
         });
 
-
         stage.setMaximized(true);
-        rawJsonWV = (WebView) scene.lookup("#rawJsonWV");
-        list = (ListView<ListItem>) scene.lookup("#list");
-        openBtns = (VBox) scene.lookup("#openBtns");
-        titleTxt = mainController.titleTxt;
+
+        //todo colors
         rawJsonView = new DesktopRawJsonView(this,
                 scene,
                 0x414659,
@@ -85,6 +94,10 @@ public class MainApplication extends Application {
                 0x735471,
                 0xBA1A1A,
                 0xDDE1F9);
+        rawJsonView.showJson = true;
+        rawJsonView.toggleSplitView();
+
+        //todo webController
 
         rawJsonView.updateRawJson("");
 
@@ -92,31 +105,37 @@ public class MainApplication extends Application {
         jsonLoader = new DesktopJsonLoader(this);
 
 
+        //todo DragAndDrop
+
     }
-    private void handleZoom(ScrollEvent event, WebView webView) {
-        if (event.isControlDown()) {
-            if (event.getDeltaY() > 0) {
-                zoomFactor += ZOOM_DELTA;
-            } else {
-                zoomFactor = Math.max(0.5, zoomFactor - ZOOM_DELTA);
-            }
-            webView.setZoom(zoomFactor);
-            event.consume();
-        }
-    }
+
+
 
     private void setEvents() {
 
-        rawJsonWV.setOnScroll(event -> handleZoom(event, rawJsonWV));
+        scene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ESCAPE){
+                goBack();
+            }
+        });
 
-        ((Button) scene.lookup("#openFileBtn")).setOnAction(e -> fileManager.importFromFile());
-        ((Button) scene.lookup("#backBtn")).setOnAction(e -> goBack());
 
+        controller.menuBtn.setOnAction(e -> fileManager.importFromFile());
+
+        controller.openFileBtn.setOnAction(e -> fileManager.importFromFile());
+        controller.backBtn.setOnAction(e -> goBack());
+
+        controller.splitViewBtn.setOnAction(e -> rawJsonView.toggleSplitView());
     }
     public void LoadStateData() {
         boolean prevSH = state != null && state.isSyntaxHighlighting();
-        if (isRawJsonLoaded && prevSH != state.isSyntaxHighlighting()) {
-            isRawJsonLoaded = false;
+
+        state = new AppState(); //todo FileSystem.loadStateData(this);
+
+        if (rawJsonView.isRawJsonLoaded && prevSH != state.isSyntaxHighlighting()) {
+            rawJsonView.isRawJsonLoaded = false;
+            if (rawJsonView.showJson)
+                rawJsonView.ShowJSON();
         }
     }
 
@@ -137,21 +156,46 @@ public class MainApplication extends Application {
 
     public void open(String Title, String path, int previousPosition) {
         data.setPath(path);
-        titleTxt.setText(Title);
+        controller.titleTxt.setText(Title);
         ArrayList<ListItem> arrayList = getListFromPath(path,data.getRootList());
         data.setCurrentList(arrayList);
-        list.getItems().clear();
-        list.getItems().addAll(arrayList);
-        list.setCellFactory(this::ListAdapter);
+        controller.list.getItems().clear();
+        controller.list.getItems().addAll(arrayList);
+        controller.list.setCellFactory(this::ListAdapter);
         if (previousPosition == -1) {
+            delay(400,() ->{
+                highlightedItem = data.getPreviousPos();
+                controller.list.refresh();
+                controller.list.scrollTo(data.getPreviousPos()-2);
+            });
         }
         else data.addPreviousPos(previousPosition);
+        if (!path.isEmpty()) {
+          controller.showBackBtn();
+        } else controller.hideBackBtn();
+
+    }
+
+    public static void delay(long millis, Runnable continuation) {
+        Task<Void> sleeper = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                try { Thread.sleep(millis); }
+                catch (InterruptedException e) { }
+                return null;
+            }
+        };
+        sleeper.setOnSucceeded(event -> continuation.run());
+        new Thread(sleeper).start();
     }
 
     FileManager.FileCallback fileCallback = new FileManager.FileCallback() {
         @Override
         public void onFileLoaded(String data) {
-            rawJsonView.updateRawJson(data);
+            if (data == null) {
+                System.out.println("ReadFile: null data");
+                return;
+            }
             jsonLoader.LoadData(data,jsonLoaderCallback); //todo thread??
         }
 
@@ -179,13 +223,23 @@ public class MainApplication extends Application {
         @Override
         public void success() {
                 data.setCurrentList(data.getRootList());
-                list.getItems().addAll(data.getRootList());
-                list.setCellFactory(listItemListView -> ListAdapter(listItemListView));
-                openBtns.setVisible(false);
-                list.setVisible(true);
-                titleTxt.setText("");
+                controller.list.getItems().clear();
+                controller.list.getItems().addAll(data.getRootList());
+                controller.list.setCellFactory(listItemListView -> ListAdapter(listItemListView));
+
+                controller.openBtns.setVisible(false);
+                controller.list.setVisible(true);
+                controller.hideBackBtn();
+                controller.titleTxt.setText("");
+                data.clearPath();
         }
+
+        @Override
         public void after() {
+            rawJsonView.isRawJsonLoaded = false;
+            if (rawJsonView.showJson){
+                rawJsonView.ShowJSON();
+            }
         }
     };
 
@@ -196,16 +250,18 @@ public class MainApplication extends Application {
         int b = (int) (color.getBlue() * 255);
         return (r << 16) | (g << 8) | b;
     }
+    public int highlightedItem = -1;
     private ListCell<ListItem> ListAdapter(ListView<ListItem> lv) {
         return new ListCell<>() {
             private AnchorPane root;
-            private ListItemController controller;
+            private ListItemController listController;
+            private PauseTransition resetStylePause = new PauseTransition(Duration.seconds(1));
 
             {
                 try {
                     FXMLLoader loader = new FXMLLoader(MainApplication.class.getResource("list_item.fxml"));
                     root = loader.load();
-                    controller = loader.getController();
+                    listController = loader.getController();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -217,19 +273,31 @@ public class MainApplication extends Application {
 
 
                 if (empty || item == null || item.isSpace()) {
+                    setStyle("");
                     setGraphic(null);
                 } else {
 
-                    controller.itemVB.getChildren().clear();
+                    setStyle("");
+
+                    listController.itemVB.getChildren().clear();
 
                     if (item.getName() != null) {
-                        controller.itemVB.getChildren().add(controller.itemName);
-                        controller.itemName.setText(item.getName());
+                        listController.itemVB.getChildren().add(listController.itemName);
+                        listController.itemName.setText(item.getName());
                     }
 
                     if(!(item.isArray() || item.isObject())){
-                        controller.itemVB.getChildren().add(controller.itemValue);
-                        controller.itemValue.setText(item.getValue());
+                        listController.itemVB.getChildren().add(listController.itemValue);
+                        listController.itemValue.setText(item.getValue());
+                    }
+
+                    if (highlightedItem != -1 && highlightedItem == getIndex()){
+                        setStyle("-fx-background-color: yellow;");
+                        resetStylePause.setOnFinished(e -> {
+                            highlightedItem = -1;
+                            controller.list.refresh();
+                        });
+                        resetStylePause.play();
                     }
 
 
