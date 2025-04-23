@@ -1,2 +1,3 @@
 rootProject.name = "Json List Desktop"
-include ':app'
+include 'app'
+include 'core'

@@ -26,6 +26,9 @@ javafx {
 }
 
 dependencies {
+
+  implementation project(':core')
+
   implementation 'org.openjfx:javafx-controls:17'
   implementation 'org.openjfx:javafx-web:17'
   implementation 'com.google.code.gson:gson:2.11.0'
