@@ -5,10 +5,10 @@ module com.sj14apps.jsonlist {
     requires com.google.gson;
     requires java.desktop;
     requires java.prefs;
-
+    requires com.sj14apps.jsonlist.core;
 
     opens com.sj14apps.jsonlist to javafx.fxml;
     exports com.sj14apps.jsonlist;
-    exports com.sj14apps.jsonlist.controllers;
+
     opens com.sj14apps.jsonlist.controllers to javafx.fxml;
 }
