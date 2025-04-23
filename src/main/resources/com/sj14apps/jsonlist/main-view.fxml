@@ -20,7 +20,7 @@
                     </graphic>
                 </Button>
 
-                <Label fx:id="titleTxt" maxWidth="Infinity" styleClass="title-text" text="Test/path/123" HBox.hgrow="ALWAYS" />
+                <Label fx:id="titleTxt" maxWidth="Infinity" styleClass="title-text" text="Test/path/123" textOverrun="LEADING_ELLIPSIS" HBox.hgrow="ALWAYS" />
 
                 <Button fx:id="splitViewBtn" styleClass="icon-button">
                     <graphic>
