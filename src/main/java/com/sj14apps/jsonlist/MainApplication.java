@@ -22,6 +22,8 @@ import javafx.scene.control.*;
 
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -49,6 +51,7 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
 // todo   Handler handler = new Handler();
     Thread readFileThread;
     AppState state;
+// todo   int listPrevDx = 0;
     RawJsonView rawJsonView;
     FileManager fileManager;
     WebManager webController; //todo
@@ -62,6 +65,7 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
         LoadStateData();
         setEvents();
 
+        //todo animate image and button
     }
 
     private void initialize(Stage stage) throws IOException {
@@ -82,6 +86,11 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
                 controller.mainLL.setOrientation(Orientation.HORIZONTAL);
                 controller.rawJsonRL.setPadding(new Insets(10,10,10,0));
             }
+        });
+
+        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
+            if(mouseEvent.getButton() == MouseButton.BACK)
+                goBack();
         });
 
         stage.setMaximized(true);
@@ -120,13 +129,31 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
         });
 
 
+//        todo menuBtn.setOnClickListener(view -> open_closeMenu());
         controller.menuBtn.setOnAction(e -> fileManager.importFromFile());
 
         controller.openFileBtn.setOnAction(e -> fileManager.importFromFile());
         controller.backBtn.setOnAction(e -> goBack());
+        //todo openUrlBtn
 
+        //todo titleTxt.setOnClickListener
+
+        //todo pathListView.setOnClickListener(v -> showHidePathList());
+
+        //todo urlSearch.setOnEditorActionListener
+
+        //todo menu.findViewById(R.id.openFileBtn2).setOnClickListener
+        //todo menu.findViewById(R.id.searchUrlBtn).setOnClickListener
+        //todo menu.findViewById(R.id.settingsBtn).setOnClickListener
+        //todo menu.findViewById(R.id.aboutBtn).setOnClickListener
+        //todo menu.findViewById(R.id.logBtn).setOnClickListener
+        //todo dim_bg.setOnClickListener(view -> open_closeMenu());
         controller.splitViewBtn.setOnAction(e -> rawJsonView.toggleSplitView());
+        //todo filterBtn.setOnClickListener(view -> filter());
     }
+
+
+    //todo
     public void LoadStateData() {
         boolean prevSH = state != null && state.isSyntaxHighlighting();
 
@@ -151,18 +178,45 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
     public static void main(String[] args) {
         System.setProperty("prism.order", "d3d"); // For Windows (Direct3D)
         System.setProperty("prism.order", "es2"); // For OpenGL (Linux/macOS)
+        System.setProperty("prism.text", "t2k");
+        System.setProperty("javafx.web.enableCef", "true");
         launch();
     }
 
     public void open(String Title, String path, int previousPosition) {
+//   todo     TransitionManager.endTransitions(viewGroup);
+//        TransitionManager.beginDelayedTransition(viewGroup, autoTransition);
+//
+//        if (isMenuOpen)
+//            open_closeMenu();
+//
+//        if (emptyListTxt.getVisibility() == View.VISIBLE)
+//            emptyListTxt.setVisibility(View.GONE);
+//
+//
+//
+//        pathAdapter = new PathListAdapter(this,path);
+//        pathList.setAdapter(pathAdapter);
         data.setPath(path);
         controller.titleTxt.setText(Title);
         ArrayList<ListItem> arrayList = getListFromPath(path,data.getRootList());
         data.setCurrentList(arrayList);
+//        updateFilterList(arrayList);
+//        adapter = new ListAdapter(arrayList, this, path);
+//        list.setAdapter(adapter);
         controller.list.getItems().clear();
         controller.list.getItems().addAll(arrayList);
         controller.list.setCellFactory(this::ListAdapter);
+//        list.refresh();
+//
         if (previousPosition == -1) {
+//  todo          handler.postDelayed(() -> {
+//  todo              list.smoothScrollToPosition(data.getPreviousPos()+2);
+//  todo              adapter.setHighlightItem(data.getPreviousPos());
+//  todo          }, 500);
+//  todo          handler.postDelayed(() -> {
+//  todo              adapter.notifyItemChanged(data.getPreviousPos());
+//  todo          }, 600);
             delay(400,() ->{
                 highlightedItem = data.getPreviousPos();
                 controller.list.refresh();
@@ -170,6 +224,10 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
             });
         }
         else data.addPreviousPos(previousPosition);
+//
+//  todo      if (arrayList.isEmpty()) {
+//  todo          emptyListTxt.setVisibility(View.VISIBLE);
+//  todo      }
         if (!path.isEmpty()) {
           controller.showBackBtn();
         } else controller.hideBackBtn();
@@ -211,27 +269,50 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
     };
 
     JsonLoader.JsonLoaderCallback jsonLoaderCallback = new JsonLoader.JsonLoaderCallback() {
+
+
         @Override
         public void start() {
+//            loadingStarted(getString(R.string.loading_json));
+//            emptyListTxt.setVisibility(View.GONE);
         }
+
         @Override
         public void started() {
+//       todo     handler.post(()-> loadingStarted(getString(R.string.creating_list)));
         }
+
         @Override
         public void failed() {
+//      todo      handler.post(() -> loadingFinished(false));
         }
+
         @Override
         public void success() {
+//         todo   handler.post(() -> {
+//                TransitionManager.beginDelayedTransition(viewGroup, autoTransition);
+//
+//                if (urlLL.getVisibility() == View.VISIBLE)
+//                    hideUrlSearchView();
+//
                 data.setCurrentList(data.getRootList());
+//                updateFilterList(data.getRootList());
+//                pathAdapter = new PathListAdapter(MainActivity.this,data.getPath());
                 controller.list.getItems().clear();
                 controller.list.getItems().addAll(data.getRootList());
                 controller.list.setCellFactory(listItemListView -> ListAdapter(listItemListView));
 
+//                pathList.setAdapter(pathAdapter);
+//                fileImg.clearAnimation();
+//                openFileBtn.clearAnimation();
+//                fileImg.setVisibility(View.GONE);
                 controller.openBtns.setVisible(false);
                 controller.list.setVisible(true);
+//                functions.setAnimation(MainActivity.this,list,R.anim.scale_in2,new DecelerateInterpolator());
                 controller.hideBackBtn();
                 controller.titleTxt.setText("");
                 data.clearPath();
+//            });
         }
 
         @Override
@@ -240,6 +321,7 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
             if (rawJsonView.showJson){
                 rawJsonView.ShowJSON();
             }
+//          todo  else handler.post(() -> loadingFinished(true));
         }
     };
 
@@ -250,7 +332,10 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
         int b = (int) (color.getBlue() * 255);
         return (r << 16) | (g << 8) | b;
     }
+
     public int highlightedItem = -1;
+
+    //todo move to separate class
     private ListCell<ListItem> ListAdapter(ListView<ListItem> lv) {
         return new ListCell<>() {
             private AnchorPane root;
@@ -308,6 +393,7 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
 
             @Override
             public void updateSelected(boolean b) {
+//                        super.updateSelected(b);
                 ListItem item = getItem();
                 if (item.isObject() || item.isArray()) {
 
@@ -320,6 +406,27 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
     }
 
     public void goBack(){
+//  todo      if (pathListView.getVisibility() == View.VISIBLE){
+//  todo          showHidePathList();
+//  todo          return;
+//  todo      }
+//todo
+//  todo      if (isMenuOpen) {
+//  todo          open_closeMenu();
+//  todo          return;
+//  todo      }
+//todo
+//  todo      if (urlLL.getVisibility() == View.VISIBLE){
+//  todo          hideUrlSearchView();
+//  todo          return;
+//  todo      }
+
+//  todo      if (adapter!= null && adapter.selectedItem != -1){
+//  todo          adapter.selectedItem = -1;
+//  todo          adapter.notifyItemRangeChanged(0,adapter.getItemCount());
+//  todo          return;
+//  todo      }
+//
         if (data.isEmptyPath()){
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Exit?");
@@ -331,6 +438,8 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
             }
             return;
         }
+// todo       TransitionManager.endTransitions(viewGroup);
+// todo       TransitionManager.beginDelayedTransition(viewGroup, autoTransition);
         data.goBack();
         open(JsonData.getPathFormat(data.getPath()), data.getPath(),-1);
 
