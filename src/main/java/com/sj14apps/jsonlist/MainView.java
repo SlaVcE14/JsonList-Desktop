@@ -9,6 +9,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SplitPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -18,6 +19,7 @@ import javafx.scene.web.WebView;
 
 public class MainView {
 
+    public BorderPane mainView;
     private double zoomFactor = 1.0;
     private static final double ZOOM_DELTA = 0.1;
 
