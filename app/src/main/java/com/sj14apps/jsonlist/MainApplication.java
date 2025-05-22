@@ -5,6 +5,7 @@ import com.sj14apps.jsonlist.controllers.DesktopJsonLoader;
 import com.sj14apps.jsonlist.controllers.DesktopRawJsonView;
 import com.sj14apps.jsonlist.core.AppState;
 import com.sj14apps.jsonlist.core.JsonData;
+import com.sj14apps.jsonlist.core.JsonFunctions;
 import com.sj14apps.jsonlist.core.ListItem;
 import com.sj14apps.jsonlist.core.controllers.FileManager;
 import com.sj14apps.jsonlist.core.controllers.JsonLoader;
@@ -168,7 +169,7 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
 
     public void loadFileIntoWebView(File file) {
         try {
-            fileManager.readFile(new FileInputStream(file),0,fileCallback);
+            fileManager.readFile(new FileInputStream(file),file.getName(),0,fileCallback);
 
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -248,13 +249,14 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
     }
 
     FileManager.FileCallback fileCallback = new FileManager.FileCallback() {
+
         @Override
-        public void onFileLoaded(String data) {
+        public void onFileLoaded(String data, String fileName) {
             if (data == null) {
                 System.out.println("ReadFile: null data");
                 return;
             }
-            jsonLoader.LoadData(data,jsonLoaderCallback); //todo thread??
+            jsonLoader.LoadData(data,fileName,jsonLoaderCallback); //todo thread??
         }
 
         @Override

@@ -48,8 +48,7 @@ public class DesktopFileManager implements FileManager {
     }
 
     @Override
-    public void readFile(InputStream inputStream, long fileSize, FileCallback callback) {
-
+    public void readFile(InputStream inputStream, String fileName, long fileSize, FileCallback callback) {
         try {
             byte[] buffer = new byte[4096];
             StringBuilder data = new StringBuilder();
@@ -65,10 +64,20 @@ public class DesktopFileManager implements FileManager {
                     callback.onProgressUpdate(progress);
                 }
             }
-            callback.onFileLoaded(data.toString());
+            callback.onFileLoaded(data.toString(),fileName);
 
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void writeFile(OutputStream outputStream, String data, FileWriteCallback callback) {
+
+    }
+
+    @Override
+    public void saveFile(String fileName) {
+
     }
 }

@@ -23,7 +23,7 @@ public class DesktopJsonLoader implements JsonLoader {
     }
 
     @Override
-    public void LoadData(String Data, JsonLoaderCallback callBack) {
+    public void LoadData(String Data, String fileName, JsonLoaderCallback callBack) {
         JsonData data = application.data;
 
         //todo run in thread
