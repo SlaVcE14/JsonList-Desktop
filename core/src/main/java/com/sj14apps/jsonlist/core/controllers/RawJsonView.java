@@ -29,7 +29,7 @@ public abstract class RawJsonView{
         String booleanAndNullColorHex = String.format("#%06X", (0xFFFFFF & booleanAndNullColor));
         String bgColorHex = String.format("#%06X", (0xFFFFFF & bgColor));
 
-//        if (state != null && state.isSyntaxHighlighting())
+        if (state != null && state.isSyntaxHighlighting())
             jsonStr = highlightJsonSyntax(jsonStr);
 
         String style =

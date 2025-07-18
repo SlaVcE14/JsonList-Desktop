@@ -51,7 +51,7 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
 // todo   AutoTransition autoTransition = new AutoTransition();
 // todo   Handler handler = new Handler();
     Thread readFileThread;
-    AppState state;
+    public AppState state;
 // todo   int listPrevDx = 0;
     RawJsonView rawJsonView;
     FileManager fileManager;

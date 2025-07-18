@@ -1,6 +1,7 @@
 package com.sj14apps.jsonlist.controllers;
 
 import com.sj14apps.jsonlist.MainApplication;
+import com.sj14apps.jsonlist.core.AppState;
 import com.sj14apps.jsonlist.core.JsonFunctions;
 import com.sj14apps.jsonlist.core.controllers.RawJsonView;
 import javafx.scene.Scene;
@@ -48,7 +49,7 @@ public class DesktopRawJsonView extends RawJsonView {
     public void updateRawJson(String string) {
 
         //TODO change this
-        String rawJson = generateHtml(string,null);
+        String rawJson = generateHtml(string,main.state);
         WebEngine webEngine = main.controller.rawJsonWV.getEngine();
         webEngine.loadContent(rawJson);
     }
