@@ -1,7 +1,10 @@
 package com.sj14apps.jsonlist.core;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+
+import org.junit.Test;
 
 import java.util.ArrayList;
 

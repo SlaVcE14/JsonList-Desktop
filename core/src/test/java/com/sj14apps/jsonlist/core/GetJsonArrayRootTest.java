@@ -1,11 +1,14 @@
 package com.sj14apps.jsonlist.core;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
+import org.junit.Test;
 
 import java.util.ArrayList;
 
@@ -90,7 +93,6 @@ public class GetJsonArrayRootTest {
         assertEquals(expectedArr,itemsArr);
 
     }
-
 
     @Test
     public void testGetJsonArrayRootWithEmptyArray() {

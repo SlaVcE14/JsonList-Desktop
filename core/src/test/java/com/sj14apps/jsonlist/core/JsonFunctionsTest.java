@@ -1,12 +1,14 @@
 package com.sj14apps.jsonlist.core;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertNotNull;
+import static junit.framework.TestCase.assertTrue;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.junit.Test;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 
 public class JsonFunctionsTest {

@@ -1,12 +1,13 @@
 package com.sj14apps.jsonlist.core;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.*;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import org.junit.Test;
 
 public class IsArrayOfObjectsTest {
 
