@@ -14,6 +14,7 @@ import com.sj14apps.jsonlist.core.controllers.WebManager;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -55,7 +56,7 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
 // todo   int listPrevDx = 0;
     RawJsonView rawJsonView;
     FileManager fileManager;
-    WebManager webController; //todo
+    WebManager webManager;
     JsonLoader jsonLoader;
 // todo   ArrayList<String> filterList = new ArrayList<>();
 
@@ -107,12 +108,13 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
         rawJsonView.showJson = true;
         rawJsonView.toggleSplitView();
 
-        //todo webController
 
         rawJsonView.updateRawJson("");
 
         fileManager = new DesktopFileManager(stage,this);
         jsonLoader = new DesktopJsonLoader(this);
+        webManager = new WebManager();
+
 
 
         //todo DragAndDrop
@@ -134,7 +136,9 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
         controller.menuBtn.setOnAction(e -> fileManager.importFromFile());
 
         controller.openFileBtn.setOnAction(e -> fileManager.importFromFile());
+        controller.openUrlBtn.setOnAction(e -> controller.showLinkView());
         controller.backBtn.setOnAction(e -> goBack());
+        controller.searchUrlBtn.setOnAction(e -> SearchUrl());
         //todo openUrlBtn
 
         //todo titleTxt.setOnClickListener
@@ -249,6 +253,11 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
         new Thread(sleeper).start();
     }
 
+    private void SearchUrl() {
+        String url = controller.urlSearch.getText();
+        webManager.getFromUrl(url,webCallback);
+    }
+
     FileManager.FileCallback fileCallback = new FileManager.FileCallback() {
 
         @Override
@@ -292,15 +301,15 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
 
         @Override
         public void success() {
-//         todo   handler.post(() -> {
-//                TransitionManager.beginDelayedTransition(viewGroup, autoTransition);
-//
-//                if (urlLL.getVisibility() == View.VISIBLE)
-//                    hideUrlSearchView();
-//
+            Platform.runLater(() -> {
+                if (controller.urlView.isVisible())
+                    controller.hideUrlSearchView();
+
+
                 data.setCurrentList(data.getRootList());
 //                updateFilterList(data.getRootList());
 //                pathAdapter = new PathListAdapter(MainActivity.this,data.getPath());
+
                 controller.list.getItems().clear();
                 controller.list.getItems().addAll(data.getRootList());
                 controller.list.setCellFactory(listItemListView -> ListAdapter(listItemListView));
@@ -315,6 +324,8 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
                 controller.hideBackBtn();
                 controller.titleTxt.setText("");
                 data.clearPath();
+            });
+
 //            });
         }
 
@@ -325,6 +336,42 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
                 rawJsonView.ShowJSON();
             }
 //          todo  else handler.post(() -> loadingFinished(true));
+        }
+    };
+
+    WebManager.WebCallback webCallback = new WebManager.WebCallback() {
+        @Override
+        public void onStarted() {
+            controller.hideUrlSearchView();
+            //todo loading Txt
+            isUrlSearching = true;
+        }
+
+        @Override
+        public void onInvalidURL() {
+            //todo onInvalidURL Txt
+        }
+
+        @Override
+        public void onResponse(String data) {
+            //todo loading Txt
+            isUrlSearching = false;
+
+            jsonLoader.LoadData(data,null,jsonLoaderCallback);
+        }
+
+        @Override
+        public void onFailure() {
+            //todo loading Txt
+            isUrlSearching = false;
+            //todo Fail Txt
+        }
+
+        @Override
+        public void onFailure(int code) {
+            //todo loading Txt
+            isUrlSearching = false;
+            //todo Fail code Txt
         }
     };
 
@@ -419,10 +466,10 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
 //  todo          return;
 //  todo      }
 //todo
-//  todo      if (urlLL.getVisibility() == View.VISIBLE){
-//  todo          hideUrlSearchView();
-//  todo          return;
-//  todo      }
+        if (controller.urlView.isVisible()){
+            controller.hideUrlSearchView();
+            return;
+        }
 
 //  todo      if (adapter!= null && adapter.selectedItem != -1){
 //  todo          adapter.selectedItem = -1;
