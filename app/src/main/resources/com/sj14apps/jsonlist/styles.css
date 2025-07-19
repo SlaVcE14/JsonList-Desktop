@@ -129,7 +129,7 @@
 }
 
 /* Main Application Button Styles */
-#openFileBtn {
+#openFileBtn, #searchUrlBtn {
     -fx-background-color: #4A5C92; /* Material Design blue */
     -fx-text-fill: white;
     -fx-background-radius: 60;
@@ -138,12 +138,12 @@
 
 }
 
-#openFileBtn:hover {
+#openFileBtn:hover, #searchUrlBtn:hover {
     -fx-background-color: #B3C5FF; /* Darker blue */
     -fx-text-fill: black;
 }
 
-#openFileBtn:pressed {
+#openFileBtn:pressed,#searchUrlBtn:pressed {
     -fx-background-color: #ffffff; /* Darker blue */
     -fx-text-fill: black;
 }

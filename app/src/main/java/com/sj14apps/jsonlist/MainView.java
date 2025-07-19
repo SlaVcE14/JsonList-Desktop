@@ -3,10 +3,7 @@ package com.sj14apps.jsonlist;
 import com.sj14apps.jsonlist.core.ListItem;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
@@ -20,6 +17,7 @@ import javafx.scene.web.WebView;
 public class MainView {
 
     public BorderPane mainView;
+
     private double zoomFactor = 1.0;
     private static final double ZOOM_DELTA = 0.1;
 
@@ -35,6 +33,8 @@ public class MainView {
     Button menuBtn;
     @FXML
     SplitPane mainLL;
+    @FXML
+    VBox urlView;
     @FXML
     StackPane listRL;
     @FXML
@@ -53,6 +53,11 @@ public class MainView {
     public WebView rawJsonWV;
     @FXML
     Rectangle fullRawBtn;
+    @FXML
+    TextField urlSearch;
+    @FXML
+    Button searchUrlBtn;
+
 
     // todo filterBtn;
     // todo   EditText urlSearch;
@@ -100,4 +105,15 @@ public class MainView {
         }
     }
 
+    public void hideUrlSearchView() {
+        urlView.setVisible(false);
+        mainLL.setVisible(true);
+        urlSearch.clear();
+
+    }
+
+    public void showLinkView() {
+        mainLL.setVisible(false);
+        urlView.setVisible(true);
+    }
 }

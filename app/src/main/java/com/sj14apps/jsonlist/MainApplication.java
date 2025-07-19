@@ -80,7 +80,7 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
         stage.setScene(scene);
         stage.show();
         stage.widthProperty().addListener((o, oldValue, newValue)->{
-            if(newValue.intValue() < 700.0) {
+            if(newValue.intValue() < 1000.0) {
                 controller.mainLL.setOrientation(Orientation.VERTICAL);
                 controller.rawJsonRL.setPadding(new Insets(0,10,10,10));
             }else {
@@ -94,16 +94,16 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
                 goBack();
         });
 
-        stage.setMaximized(true);
+        stage.setMaximized(false);
 
         //todo colors
         rawJsonView = new DesktopRawJsonView(this,
                 scene,
-                0x414659,
-                0x4A5C92,
-                0x735471,
-                0xBA1A1A,
-                0xDDE1F9);
+                0x151B2C,
+                0x0053DC,
+                0x735470,
+                0xBA1B1B,
+                0xDCE1F9);
         rawJsonView.showJson = true;
         rawJsonView.toggleSplitView();
 
@@ -159,6 +159,7 @@ boolean isMenuOpen, isTopMenuVisible, isUrlSearching, isVertical = true;
         boolean prevSH = state != null && state.isSyntaxHighlighting();
 
         state = new AppState(); //todo FileSystem.loadStateData(this);
+        state.setSyntaxHighlighting(true);
 
         if (rawJsonView.isRawJsonLoaded && prevSH != state.isSyntaxHighlighting()) {
             rawJsonView.isRawJsonLoaded = false;
